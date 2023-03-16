@@ -1,0 +1,65 @@
+{
+  "version": "2",
+  "templates": [
+    {
+      "type": 3,
+      "title": "Pihole",
+      "description": "A black hole for Internet advertisements with DNS servered with DNS-over-TLS by Cloudflared.",
+      "categories": ["docker", "networking", "dns"],
+      "platform": "linux",
+      "logo": "https://portainer-io-assets.sfo2.digitaloceanspaces.com/logos/registry.png",
+      "repository": {
+        "url": "https://github.com/DaRacci/templates",
+        "stackfile": "compose/networking/pihole/docker-compose.yml"
+      },
+      "env": [
+        {
+          "name": "PROXY_NAME",
+          "label": "Proxy",
+          "description": "The name of the docker bridge that your reverse proxy is running on.",
+          "default": ""
+        },
+        {
+          "name": "PROXY_DOMAIN",
+          "label": "Proxy Domain",
+          "description": "The root domain that your reverse proxy is serving."
+        },
+        {
+          "name": "PIHOLE_WEBPASSWORD",
+          "label": "Web Password",
+          "description": "The password for the pihole web interface."
+        },
+        {
+          "name": "PIHOLE_INTERFACE",
+          "label": "Network Interface",
+          "description": "The network interface that pihole will listen on.",
+        },
+        {
+          "name": "PIHOLE_LAN_CIDR",
+          "label": "LAN CIDR Range",
+          "description": "The CIDR of your LAN. (e.g. 10.0.0.0/24)"
+        },
+        {
+          "name": "PIHOLE_LAN_GATEWAY",
+          "label": "LAN Gateway",
+          "description": "The gateway of your LAN. (e.g. 10.0.0.1)"
+        },
+        {
+          "name": "PIHOLE_LAN_DOMAIN",
+          "label": "LAN Domain",
+          "description": "The domain of your LAN. (e.g. example.com)"
+        },
+        {
+          "name": "PIHOLE_LAN_ADDRESS_IPv4",
+          "label": "LAN IPv4 Address",
+          "description": "The IPv4 address of your LAN. (e.g. 10.0.0.6)"
+        },
+        {
+          "name": "PIHOLE_LAN_ADDRESS_IPv6",
+          "label": "LAN IPv6 Address",
+          "description": "The IPv6 address of your LAN. (e.g. fd00::6)",
+          "default": ""
+        }
+      ]
+    }
+}

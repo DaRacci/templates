@@ -1,0 +1,73 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+version: "3.9"
+
+
+networks:
+  default:
+    name: {{ PROXY_NAME }}
+    external: true
+
+
+configs:
+  wildcard:
+    template_driver: golang
+    file: ./wildcard.conf
+
+
+services:
+  cloudflared:
+    restart: always
+    image: cloudflared
+    container_name: visibilityspots/cloudflared:latest
+
+    ports: [ "5054:5054/tcp", "5054:5054/udp" ]
+    volumes: [ "/etc/localtime:/etc/localtime:ro" ]
+    # TODO :: Secure Address
+    environment: [ "PORT=5054", "ADDRESS=0.0.0.0" ]
+
+  pihole:
+    restart: always
+    image: pihole/pihole:latest
+    container_name: pihole
+    
+    depends_on: [ "cloudflared" ]
+    
+    dns: [ "127.0.0.1", "1.1.1.1", "1.0.0.1" ]
+    ports: [ "53:53/tcp", "53:53/udp", "67:67/udp" ]
+    cap_add: [ "NET_ADMIN", "CAP_NET_BIND_SERVICE", "CAP_NET_RAW", "CAP_NET_ADMIN", "CAP_SYS_NICE", "CAP_CHOWN" ]
+
+    volumes: [ "/etc/localtime:/etc/localtime:ro", "./pihole/etc:/etc/pihole", "./pihole/dnsmasq.d:/etc/dnsmasq.d" ]
+    configs:
+      - source: wildcard
+        target: /etc/dnsmasq.d/07-wildcard.conf
+    
+    environment:
+      HOST: {{ PIHOLE_LAN_ADDRESS_IPv4 }}
+      DOMAIN: {{ PROXY_DOMAIN }}
+
+      WEBPASSWORD: {{ PIHOLE_WEBPASSWORD }}
+
+      WEBTHEME: "default-dark"
+      WEBUIBOXEDLAYOUT: "traditional"
+
+      VIRTUAL_HOST: "pihole.{{ PROXY_DOMAIN }}"
+      PIHOLE_DNS_: "cloudflared#5054;1.1.1.1"
+
+      IPv6: true
+      INTERFACE: {{ PIHOLE_LAN_INTERFACE }}
+      REV_SERVER: true
+      REV_SERVER_CIDR: {{ PIHOLE_LAN_CIDR }}
+      REV_SERVER_DOMAIN: {{ PIHOLE_LAN_DOMAIN }}
+      REV_SERVER_TARGET: {{ PIHOLE_LAN_GATEWAY }}
+      FTLCONF_LOCAL_IPV4: {{ PIHOLE_LAN_ADDRESS_IPv4 }}
+      FTLCONF_LOCAL_IPV6: {{ PIHOLE_LAN_ADDRESS_IPv6 }}
+    labels:
+      traefik.enable: true
+      traefik.docker.network: {{ PROXY_NAME }}
+      traefik.http.routers.pihole.entrypoints: "websecure"
+      traefik.http.routers.pihole.rule: "Host(`pihole.{{ PROXY_DOMAIN }}`)"
+      traefik.http.routers.pihole.middlewares: "pihole-admin"
+      traefik.http.routers.pihole.tls: true
+      traefik.http.services.pihole.loadbalancer.server.port: "80"
+      traefik.http.middlewares.pihole-admin.addprefix.prefix: "/admin"
+      com.centurylinklabs.watchtower.lifecycle.post-update: "./updateGravity"
