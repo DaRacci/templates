@@ -54,7 +54,7 @@ services:
       PIHOLE_DNS_: "cloudflared#5054;1.1.1.1"
 
       IPv6: true
-      INTERFACE: {{ PIHOLE_LAN_INTERFACE }}
+      INTERFACE: {{ PIHOLE_INTERFACE }}
       REV_SERVER: true
       REV_SERVER_CIDR: {{ PIHOLE_LAN_CIDR }}
       REV_SERVER_DOMAIN: {{ PIHOLE_LAN_DOMAIN }}
