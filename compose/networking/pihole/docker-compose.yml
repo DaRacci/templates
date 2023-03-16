@@ -4,7 +4,7 @@ version: "3.9"
 
 networks:
   default:
-    name: {{ PROXY_NAME }}
+    name: "{{ PROXY_NAME }}"
     external: true
 
 
@@ -17,8 +17,8 @@ configs:
 services:
   cloudflared:
     restart: always
-    image: cloudflared
-    container_name: visibilityspots/cloudflared:latest
+    image: visibilityspots/cloudflared:latest
+    container_name: cloudflared
 
     ports: [ "5054:5054/tcp", "5054:5054/udp" ]
     volumes: [ "/etc/localtime:/etc/localtime:ro" ]
@@ -42,10 +42,10 @@ services:
         target: /etc/dnsmasq.d/07-wildcard.conf
     
     environment:
-      HOST: {{ PIHOLE_LAN_ADDRESS_IPv4 }}
-      DOMAIN: {{ PROXY_DOMAIN }}
+      HOST: "{{ PIHOLE_LAN_ADDRESS_IPv4 }}"
+      DOMAIN: "{{ PROXY_DOMAIN }}"
 
-      WEBPASSWORD: {{ PIHOLE_WEBPASSWORD }}
+      WEBPASSWORD: "{{ PIHOLE_WEBPASSWORD }}"
 
       WEBTHEME: "default-dark"
       WEBUIBOXEDLAYOUT: "traditional"
@@ -54,16 +54,16 @@ services:
       PIHOLE_DNS_: "cloudflared#5054;1.1.1.1"
 
       IPv6: true
-      INTERFACE: {{ PIHOLE_INTERFACE }}
+      INTERFACE: "{{ PIHOLE_INTERFACE }}"
       REV_SERVER: true
-      REV_SERVER_CIDR: {{ PIHOLE_LAN_CIDR }}
-      REV_SERVER_DOMAIN: {{ PIHOLE_LAN_DOMAIN }}
-      REV_SERVER_TARGET: {{ PIHOLE_LAN_GATEWAY }}
-      FTLCONF_LOCAL_IPV4: {{ PIHOLE_LAN_ADDRESS_IPv4 }}
-      FTLCONF_LOCAL_IPV6: {{ PIHOLE_LAN_ADDRESS_IPv6 }}
+      REV_SERVER_CIDR: "{{ PIHOLE_LAN_CIDR }}"
+      REV_SERVER_DOMAIN: "{{ PIHOLE_LAN_DOMAIN }}"
+      REV_SERVER_TARGET: "{{ PIHOLE_LAN_GATEWAY }}"
+      FTLCONF_LOCAL_IPV4: "{{ PIHOLE_LAN_ADDRESS_IPv4 }}"
+      FTLCONF_LOCAL_IPV6: "{{ PIHOLE_LAN_ADDRESS_IPv6 }}"
     labels:
       traefik.enable: true
-      traefik.docker.network: {{ PROXY_NAME }}
+      traefik.docker.network: "{{ PROXY_NAME }}"
       traefik.http.routers.pihole.entrypoints: "websecure"
       traefik.http.routers.pihole.rule: "Host(`pihole.{{ PROXY_DOMAIN }}`)"
       traefik.http.routers.pihole.middlewares: "pihole-admin"
