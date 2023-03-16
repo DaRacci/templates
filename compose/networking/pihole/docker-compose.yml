@@ -11,7 +11,7 @@ networks:
 configs:
   wildcard:
     template_driver: golang
-    file: /docker/portainer/data/compose/132/compose/networking/pihole/wildcard.conf
+    file: /docker/portainer/data/compose/133/compose/networking/pihole/wildcard.conf.tmpl
 
 
 services:
@@ -42,9 +42,6 @@ services:
         target: /etc/dnsmasq.d/07-wildcard.conf
 
     environment:
-      HOST: "${PIHOLE_LAN_ADDRESS_IPv4}"
-      DOMAIN: "${PROXY_DOMAIN}"
-
       WEBPASSWORD: "${PIHOLE_WEBPASSWORD}"
 
       WEBTHEME: "default-dark"
