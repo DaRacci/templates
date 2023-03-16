@@ -11,7 +11,7 @@ networks:
 configs:
   wildcard:
     template_driver: golang
-    file: ./wildcard.conf
+    file: /docker/portainer/data/compose/132/compose/networking/pihole/wildcard.conf
 
 
 services:
