@@ -17,12 +17,13 @@
           "name": "PROXY_NAME",
           "label": "Proxy",
           "description": "The name of the docker bridge that your reverse proxy is running on.",
-          "default": ""
+          "default": "proxy"
         },
         {
           "name": "PROXY_DOMAIN",
           "label": "Proxy Domain",
-          "description": "The root domain that your reverse proxy is serving."
+          "description": "The root domain that your reverse proxy is serving.",
+          "default": "home"
         },
         {
           "name": "PIHOLE_WEBPASSWORD",
@@ -32,7 +33,7 @@
         {
           "name": "PIHOLE_INTERFACE",
           "label": "Network Interface",
-          "description": "The network interface that pihole will listen on.",
+          "description": "The network interface that pihole will listen on."
         },
         {
           "name": "PIHOLE_LAN_CIDR",
@@ -62,4 +63,5 @@
         }
       ]
     }
+  ]
 }
