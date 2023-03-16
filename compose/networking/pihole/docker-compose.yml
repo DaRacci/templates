@@ -60,7 +60,7 @@ services:
       FTLCONF_LOCAL_IPV6: "${PIHOLE_LAN_ADDRESS_IPv6}"
     labels:
       traefik.enable: true
-      traefik.docker.network: "$[PROXY_NAME}"
+      traefik.docker.network: "${PROXY_NAME}"
       traefik.http.routers.pihole.entrypoints: "websecure"
       traefik.http.routers.pihole.rule: "Host(`pihole.${PROXY_DOMAIN}`)"
       traefik.http.routers.pihole.middlewares: "pihole-admin"
