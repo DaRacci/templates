@@ -4,7 +4,7 @@ version: "3.9"
 
 networks:
   default:
-    name: {{ PROXY_NAME }}
+    name: "{{ PROXY_NAME }}"
     external: true
 
 
@@ -29,9 +29,9 @@ services:
     restart: always
     image: pihole/pihole:latest
     container_name: pihole
-    
+
     depends_on: [ "cloudflared" ]
-    
+
     dns: [ "127.0.0.1", "1.1.1.1", "1.0.0.1" ]
     ports: [ "53:53/tcp", "53:53/udp", "67:67/udp" ]
     cap_add: [ "NET_ADMIN", "CAP_NET_BIND_SERVICE", "CAP_NET_RAW", "CAP_NET_ADMIN", "CAP_SYS_NICE", "CAP_CHOWN" ]
@@ -40,7 +40,7 @@ services:
     configs:
       - source: wildcard
         target: /etc/dnsmasq.d/07-wildcard.conf
-    
+
     environment:
       HOST: "{{ PIHOLE_LAN_ADDRESS_IPv4 }}"
       DOMAIN: "{{ PROXY_DOMAIN }}"
